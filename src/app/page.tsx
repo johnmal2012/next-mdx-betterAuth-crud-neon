@@ -1,0 +1,185 @@
+import Navigation from '@/components/navigation';
+
+// import { physicianProfile } from '@/data/physician';
+import { db } from '@/db/db';
+
+import { physicianSections } from '@/db/schema/physician-sections';
+
+// import PhysicianSection from '@/components/physician-section';
+
+import { asc } from 'drizzle-orm';
+import HeroSection from '@/components/sections/hero-section';
+import EducationSection from '@/components/sections/education-section';
+import ExpertiseSection from '@/components/sections/expertise-section';
+import PhilosophySection from '@/components/sections/philosophy-section';
+import ResearchSection from '@/components/sections/research-section';
+import OfficeHoursSection from '@/components/sections/office-hours-section';
+import InsuranceSection from '@/components/sections/insurance-section';
+import MapSection from '@/components/sections/map-section';
+import ContactSection from '@/components/sections/contact-section';
+import FooterSection from '@/components/sections/footer-section';
+import { SectionMap } from '@/types/section-map';
+
+export default async function PhysicianPage() {
+  //   const sections = await db.select().from(physicianSections).orderBy(
+  //     asc(physicianSections.displayOrder)
+  //   );
+
+   /*
+  =====================================
+  FETCH PHYSICIAN PROFILE
+  =====================================
+  */
+
+  const profile = await db.query.physicianProfile.findFirst();
+
+  if (!profile) {
+    return <div>No physician profile found.</div>;
+  }
+
+  /*
+  =====================================
+  FETCH ALL SECTIONS
+  =====================================
+  */
+
+  const rows = await db
+    .select()
+    .from(physicianSections)
+    .orderBy(asc(physicianSections.displayOrder));
+
+  /*
+  =====================================
+  CONVERT ARRAY → OBJECT MAP
+  =====================================
+  */
+
+  const sections: SectionMap = Object.fromEntries(
+    rows.map((section) => [
+      section.slug,
+      {
+        title: section.title,
+        content: section.content,
+      },
+    ]),
+  );
+
+  // console.log('sections: ', sections);
+  return (
+    <main className="min-h-screen bg-white text-slate-900">
+      {/* <section className="grid md:grid-cols-2 gap-10 items-center"> */}
+      {/* <div>
+          <Image
+            src={physicianData.image}
+            alt={physicianData.name}
+            width={600}
+            height={700}
+            className="rounded-2xl object-cover"
+            priority
+          />
+        </div>
+        <div className="space-y-6">
+          <p className="text-sm uppercase tracking-widest">
+            {physicianData.specialty}
+          </p>
+
+          <h1 className="text-6xl font-bold leading-tight">
+            {physicianData.name}
+          </h1>
+
+          <p className="text-2xl text-zinc-600">{physicianData.title}</p>
+
+          <div className="space-y-2">
+            <p>{physicianData.clinicName}</p>
+
+            <p>{physicianData.phone}</p>
+
+            <p>{physicianData.email}</p>
+          </div>
+        </div> 
+        <div>*/}
+      <Navigation
+        navItems={profile.navItems ?? []}
+        logo={profile.logo}
+        specialty={profile.specialty}
+        clinicName={profile.clinicName}
+        linkName={profile.linkName}
+        footCareLink={profile.footCareLink}
+      />
+
+      {/* Hero */}
+      {sections.hero && <HeroSection content={sections.hero.content} />}
+      {/* </div>
+      </section> */}
+      {/* <section className="space-y-16">
+        {sections.map((section) => (
+          <PhysicianSection
+            key={section.id}
+            title={section.title}
+            content={section.content}
+          />
+        ))} 
+      </section>*/}
+
+      {/* Education */}
+      {sections.education && (
+        <EducationSection
+          title={sections.education.title}
+          content={sections.education.content}
+        />
+      )}
+
+      {/* Expertise */}
+      {sections.expertise && (
+        <ExpertiseSection
+          title={sections.expertise.title}
+          content={sections.expertise.content}
+          expertise={profile.expertise ?? []}
+        />
+      )}
+
+      {/* Philosophy */}
+      {sections.philosophy && (
+        <PhilosophySection
+          title={sections.philosophy.title}
+          content={sections.philosophy.content}
+        />
+      )}
+
+      {/* Research */}
+      {sections.research && (
+        <ResearchSection
+          title={sections.research.title}
+          content={sections.research.content}
+        />
+      )}
+
+      {/* Office Hours */}
+      {sections.office_hours && (
+        <OfficeHoursSection
+          title={sections.office_hours.title}
+          content={sections.office_hours.content}
+        />
+      )}
+
+      {/* Insurance */}
+      {sections.insurance && (
+        <InsuranceSection
+          title={sections.insurance.title}
+          content={sections.insurance.content}
+        />
+      )}
+
+      {/* Office location */}
+      <MapSection
+        location={profile.location}
+        address={profile.address}
+      />
+
+      {/* Contact Information */}
+      {sections.contact && <ContactSection title={sections.contact.title} />}
+
+      <FooterSection />
+    </main>
+  );
+}

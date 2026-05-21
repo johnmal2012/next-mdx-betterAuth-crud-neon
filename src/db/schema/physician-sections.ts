@@ -1,0 +1,29 @@
+import {
+  pgTable,
+  serial,
+  varchar,
+  text,
+  integer,
+} from 'drizzle-orm/pg-core';
+
+// table name = physician_sections
+export const physicianSections = pgTable(
+  'physician_sections',
+  {
+    id: serial('id').primaryKey(),
+
+    slug: varchar('slug', {
+      length: 255,
+    }).notNull(),
+
+    title: varchar('title', {
+      length: 255,
+    }).notNull(),
+
+    content: text('content').notNull(),
+
+    displayOrder: integer('display_order')
+      .notNull()
+      .default(0),
+  }
+);

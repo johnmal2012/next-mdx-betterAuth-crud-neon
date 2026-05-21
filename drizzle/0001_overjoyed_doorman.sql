@@ -1,0 +1,21 @@
+CREATE TABLE "physician_profile" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"logo" text NOT NULL,
+	"name" text NOT NULL,
+	"board_specialty" text NOT NULL,
+	"specialty" text NOT NULL,
+	"title" text NOT NULL,
+	"image" text NOT NULL,
+	"clinic_name" text NOT NULL,
+	"clinic_address" text NOT NULL,
+	"phone" text NOT NULL,
+	"email" text NOT NULL,
+	"address" text NOT NULL,
+	"location" text NOT NULL,
+	"link_name" text NOT NULL,
+	"footcare_link" text NOT NULL,
+	"expertise" jsonb DEFAULT '[]'::jsonb,
+	"nav_items" jsonb DEFAULT '[]'::jsonb,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
+);
