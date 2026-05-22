@@ -221,7 +221,7 @@ export function SectionDeleteButton({ id }: Props) {
 
       router.refresh();
 
-      router.push('/admin/sections');
+    //   router.push('/admin/sections');
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Something went wrong';
