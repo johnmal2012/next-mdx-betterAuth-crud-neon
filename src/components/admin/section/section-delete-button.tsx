@@ -138,7 +138,7 @@
 
 'use client';
 
-import { startTransition, useState } from 'react';
+import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -190,61 +190,41 @@ export function SectionDeleteButton({ id }: Props) {
   //   }, [error]);
 
   async function handleDelete() {
-    // const confirmed = confirm('Delete this section? This cannot be undone.');
-
-    // if (!confirmed) return;
-
     setLoading(true);
+
     setError({});
 
-    // TESTING:
-    // Use an ID that does not exist in database
-    // const testId = 999999;
-    // console.log('Deleting section id:', testId);
+    setGeneralError(null);
 
     try {
-      startTransition(async () => {
-        const result = await deletePhysicianSection(id);
+      const result = await deletePhysicianSection(id);
 
-        if (!result.success) {
-          if (result.error) {
-            setError({
-              slug: result.error.slug?.[0],
-              title: result.error.title?.[0],
-              content: result.error.content?.[0],
-              displayOrder: result.error.displayOrder?.[0],
-              general: result.error._form?.[0],
-            });
-          }
-
-          toast.error(result.message ?? 'Failed to delete section');
-
-          return;
+      if (!result.success) {
+        if (result.error) {
+          setError({
+            slug: result.error.slug?.[0],
+            title: result.error.title?.[0],
+            content: result.error.content?.[0],
+            displayOrder: result.error.displayOrder?.[0],
+            general: result.error._form?.[0],
+          });
         }
-      });
 
-      //   if (!res.ok) {
-      //     throw new Error('Delete failed');
-      //   }
+        toast.error(result.message ?? 'Failed to delete section');
 
-      //   console.log('Response status:', res.status);
-      // Attempt to parse error message from API response
-      //   const data = await res.json().catch(() => null);
-
-      //   console.log('Response data:', data);
+        return;
+      }
 
       toast.success('Section deleted successfully');
 
       setOpen(false);
 
       router.refresh();
+
       router.push('/admin/sections');
     } catch (err) {
-      //   alert('Failed to delete section');
-      //   console.error('Delete error:', err);
-
       const message =
-        error instanceof Error ? error.message : 'Something went wrong';
+        err instanceof Error ? err.message : 'Something went wrong';
 
       setGeneralError(message);
 

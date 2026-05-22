@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -14,7 +14,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
- DialogTitle,
+  DialogTitle,
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
@@ -23,34 +23,33 @@ type Props = {
   id: number;
 };
 
-export function PhysicianProfileDeleteButton({
-  id,
-}: Props) {
+export function PhysicianProfileDeleteButton({ id }: Props) {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
 
-  const [isPending, startTransition] =
-    useTransition();
+  const [loading, setLoading] = useState(false);
 
-  function handleDelete() {
-    startTransition(async () => {
-      try {
-        await deletePhysicianProfile(id);
+  //   const [isPending, startTransition] =
+  //     useTransition();
 
-        toast.success('Profile deleted');
+  async function handleDelete() {
+    // startTransition(async () => {
+    setLoading(false);
+    try {
+      await deletePhysicianProfile(id);
 
-        setOpen(false);
+      toast.success('Profile deleted');
+      setLoading(true);
+      setOpen(false);
 
-        router.refresh();
-      } catch (error) {
-        console.error(error);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
 
-        toast.error(
-          'Failed to delete profile'
-        );
-      }
-    });
+      toast.error('Failed to delete profile');
+    }
+    // });
   }
 
   return (
@@ -60,26 +59,20 @@ export function PhysicianProfileDeleteButton({
         variant="destructive"
         className="h-10 w-24"
         onClick={() => setOpen(true)}
-        disabled={isPending}
+        disabled={loading}
       >
         Delete
       </Button>
 
       {/* Dialog */}
-      <Dialog
-        open={open}
-        onOpenChange={setOpen}
-      >
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              Delete Profile
-            </DialogTitle>
+            <DialogTitle>Delete Profile</DialogTitle>
 
             <DialogDescription>
-              This action cannot be undone.
-              This will permanently delete
-              the physician profile.
+              This action cannot be undone. This will permanently delete the
+              physician profile.
             </DialogDescription>
           </DialogHeader>
 
@@ -87,7 +80,7 @@ export function PhysicianProfileDeleteButton({
             <Button
               variant="outline"
               onClick={() => setOpen(false)}
-              disabled={isPending}
+              disabled={loading}
             >
               Cancel
             </Button>
@@ -95,11 +88,9 @@ export function PhysicianProfileDeleteButton({
             <Button
               variant="destructive"
               onClick={handleDelete}
-              disabled={isPending}
+              disabled={loading}
             >
-              {isPending
-                ? 'Deleting...'
-                : 'Delete'}
+              {loading ? 'Deleting...' : 'Delete'}
             </Button>
           </DialogFooter>
         </DialogContent>
