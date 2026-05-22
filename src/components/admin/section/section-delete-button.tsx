@@ -218,9 +218,9 @@ export function SectionDeleteButton({ id }: Props) {
       toast.success('Section deleted successfully');
 
       setOpen(false);
-
+      // need to refresh the current route's server components using  revalidatePath after deleting in server
       router.refresh();
-
+      // redundant as already on /admin/sections
     //   router.push('/admin/sections');
     } catch (err) {
       const message =
