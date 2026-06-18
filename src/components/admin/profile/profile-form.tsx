@@ -116,6 +116,7 @@ export function ProfileForm({ profile }: Props) {
     setErrors({});
 
     startTransition(async () => {
+        // console.log('formData: ', formData)
       const parsedNavItems = parseNavItems(formData.navItems);
 
       if (!parsedNavItems.success) {

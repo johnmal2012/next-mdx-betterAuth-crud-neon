@@ -1,45 +1,45 @@
 import { z } from 'zod';
+import { optionalText } from '@/lib/optionalText';
+import { optionalSpecial } from '@/lib/optionalSpecial';
 
 export const physicianProfileSchema =
   z.object({
-    logo: z.string().min(1, 'Logo name is required'),
+    logo: optionalText(z.string().min(1)),
 
-    name: z.string().min(1, 'Full name with title is required'),
+    name: optionalText(z.string().min(1)),
 
     boardSpecialty:
-      z.string().min(1, 'Official Title is required'),
+      optionalText(z.string().min(1)),
 
     specialty:
-      z.string().min(1, 'Specialty name is required'),
+      optionalText(z.string().min(1)),
 
-    title: z.string().min(1, 'Title is required'),
+    title: optionalText(z.string().min(1)),
 
-    image: z.string().min(1, 'Image URL is required'),
+    image: optionalText(z.string().min(1)),
 
     clinicName:
-      z.string().min(1, 'Clinic Name is required'),
+      optionalText(z.string().min(1)),
 
     clinicAddress:
-      z.string().min(1, 'Clinic Address is required'),
+      optionalText(z.string().min(1)),
 
-    phone: z.string().min(1, 'Phone is required'),
+    phone: optionalText(z.string().min(1)),
 
-    email: z.email('Please enter a valid email'),
+    email: optionalSpecial(z.email()),
 
-    address: z.string().min(1, 'Address is required'),
+    address: optionalText(z.string().min(1)),
 
     location:
-      z.string().min(1, 'Location is required'),
+      optionalText(z.string().min(1)),
 
     linkName:
-      z.string().min(1, 'External Site Name is required'),
+      optionalText(z.string().min(1)),
 
     footCareLink:
-      z.url('Please enter a valid URL for the external site'),
+      optionalSpecial(z.url()),
 
-    expertise: z.array(
-      z.string().min(1, 'At least one expertise is required and separate multiple expertise with commas')
-    ),
+    expertise: z.array(z.string().min(1)).default([]),
 
     navItems: z.array(
       z.object({

@@ -100,11 +100,11 @@ export default async function PhysicianPage() {
         <div>*/}
       <Navigation
         navItems={profile.navItems ?? []}
-        logo={profile.logo}
-        specialty={profile.specialty}
-        clinicName={profile.clinicName}
-        linkName={profile.linkName}
-        footCareLink={profile.footCareLink}
+        logo={profile.logo ?? ''}
+        specialty={profile.specialty ?? ''}
+        clinicName={profile.clinicName ?? ''}
+        linkName={profile.linkName ?? ''}
+        footCareLink={profile.footCareLink ?? ''}
       />
 
       {/* Hero */}
@@ -172,8 +172,8 @@ export default async function PhysicianPage() {
 
       {/* Office location */}
       <MapSection
-        location={profile.location}
-        address={profile.address}
+        location={profile.location ?? ''}
+        address={profile.address ?? ''}
       />
 
       {/* Contact Information */}
